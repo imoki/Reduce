@@ -10,6 +10,8 @@ from urllib.parse import quote,unquote,quote_plus
 from time import sleep
 #from collections import deque
 
+os.environ['NO_PROXY'] = 'www.paperyy.com'	# 修复因代理问题导致的请求失败问题
+
 config = {
 	'maxnum' : 2,	# 指定一个账号的最大降重次数
 	'reponame' : 'repo.txt',	# 报告记录文件
