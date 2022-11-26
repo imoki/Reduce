@@ -6,18 +6,21 @@ import argparse
 import random
 import os
 import sys
+import chardet
 from urllib.parse import quote,unquote,quote_plus
 from time import sleep
 #from collections import deque
 
-os.environ['NO_PROXY'] = 'www.paperyy.com'	# 修复因代理问题导致的请求失败问题
+os.environ['NO_PROXY'] = 'www.paperyy.com'
 
 config = {
+	# 可自由配置的选项
 	'maxnum' : 2,	# 指定一个账号的最大降重次数
 	'reponame' : 'repo.txt',	# 报告记录文件
 	'sentencename' : 'sentence.txt',	# 待降重文本文件
 	'cutlength': 400,	# 指定每次降重的字数，最大为400字
 
+	# paperyy的降重url
 	'url_reduce' : 'https://www.paperyy.com/api/v1/reduce/reduce-sentence/',
 	'headers_reduce' : {
 		'Host': 'www.paperyy.com',
@@ -26,7 +29,7 @@ config = {
 		'Accept': 'application/json, text/javascript, */*',
 		'Content-Type': 'application/x-www-form-urlencoded',
 		'Sec-Ch-Ua-Mobile': '?0',
-		'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
+		'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10',
 		'Sec-Ch-Ua-Platform': '"Windows"',
 		'Origin': 'null',
 		'Sec-Fetch-Site': 'cross-site',
@@ -39,6 +42,8 @@ config = {
 	'data_reduce' : {
 		'sentence':''
 	},
+	
+	# 抓包测试时使用
 	'proxies':{
 		'http':'http://127.0.0.1:8080',
 		'https':'http://127.0.0.1:8080'
@@ -50,28 +55,60 @@ config = {
 def logo():
 	print("[+] 欢迎使用降重程序")
 	logo = '''\
-     ________     ____   
-    / _   __ \   / __ \  
-   / / / / / /  / / / /
-  / / / / / /  / /_/ /
- /_/ /_/ /_/   \____/
-	'''
+            _____                      _______           
+           /\    \                    /  \    \          
+          /  \____\                  /    \    \         
+         /    |   |                 /      \    \        
+        /     |   |                /        \    \       
+       /      |   |               /   /--\   \    \      
+      /   /|  |   |              /   /    \   \    \     
+     /   / |  |   |             /   /    / \   \    \    
+    /   /  |  |___|______      /   /____/   \   \____\   
+   /   /   |        \    \    |   |    |     |   |    |  
+  /   /    |         \____\   |   |____|     |   |    |  
+  \  /    / -----/   /    /    \   \    \   /   /    /   
+   \/____/      /   /    /      \   \    \ /   /    /    
+               /   /    /        \   \    /   /    /     
+              /   /    /          \   \__/   /    /      
+             /   /    /            \        /    /       
+            /   /    /              \      /    /        
+           /   /    /                \    /    /         
+          /   /    /                  \  /____/          
+          \  /    /                    --                
+           \/____/                              v1.2.3   
+ '''
 	print(logo)
 	print("[+] 降重程序启动")
+
+# 检查打开的文本编码
+def checkCode(str):
+	adchar = chardet.detect(str)
+	# 由于windows系统的编码可能为Windows-1254,打印后是乱码,因此不直接用adchar['encoding']编码
+	#if adchar['encoding'] is not None:
+	# str = str.decode(adchar['encoding'], "ignore")
+	if adchar['encoding'] == 'gbk' or adchar['encoding'] == 'GBK' or adchar['encoding'] == 'GB2312':
+		str = str.decode('GB2312', "ignore")
+	else:
+		str = str.decode('utf-8', "ignore")
+	return str
 
 # 读取记录
 def readRepo(filename):
 	print("[+] 读取报告")
 	if os.path.isfile(filename):
-		with open(filename, 'r', encoding='utf-8') as f:
+		#with open(filename, 'r', encoding='utf-8') as f:
+		with open(filename, 'rb') as f:	# 以二进制的形式读取文本
 			global repo
-			repo = f.readlines()
+			repo = f.read() #f.readlines()	# 二进制的文本
+			repo = checkCode(repo)	# 检查编码并返回解码后的字符串
+			repo = repo.splitlines()	# 去除回车，返回列表
+			#print(repo)
 	else:
 		print("[-] 报告记录文件不存在")
 		f = open(filename,'w')
 		f.close()
 		print("[+] 已创建报告记录文件，请向文件内写入指定内容")
-		print("[+] 例如：https://report3.paperyy.com/20220222/5-aaaabbbb-6666-45d9-9ddd-814446655694/report.zip")
+		print("[+] 例如：https://report3.paperyy.com/20220101/3-aaaaaaaa-7777-8888-9999-111111111111/report.zip")
 		os.system("pause")
 		sys.exit(1)
 
@@ -79,9 +116,11 @@ def readRepo(filename):
 def readSentence(filename, length):
 	print("[+] 读取文本")
 	if os.path.isfile(filename):
-		with open(filename, 'r', encoding='utf-8') as f:
+		with open(filename, 'rb') as f:
 			global sentencelines
-			sentence = f.read().splitlines()	# 去除回车，返回列表
+			sentence = f.read()
+			sentence = checkCode(sentence)
+			sentence = sentence.splitlines()	# 去除回车，返回列表
 			sentence = ''.join(sentence)	# 将列表拼接成一行，可能多于400字
 			sentencelines = cutSentence(sentence, length)	# 按照长度为400分割字符串
 	else:
@@ -115,20 +154,16 @@ def writeNotReduceSentence(reduceSentence):
 def getTranslation(sentence, repoId):
 	config['data_reduce']['sentence'] = sentence
 	url = config['url_reduce'] + str(repoId)
-	#response = requests.post(url = url , headers = config['headers_reduce'], data = config['data_reduce'], timeout=(10,20), verify=False, proxies = config['proxies'])	#data = json.dumps(data)
+	#response = requests.post(url = url , headers = config['headers_reduce'], data = config['data_reduce'], timeout=(10,20), verify=False, proxies = config['proxies'])	#用于抓包测试
 	response = requests.post(url = url , headers = config['headers_reduce'], data = config['data_reduce'], timeout=(10,20))	#data = json.dumps(data)
-	#response = '{"code":-2004,"msg":"每篇报告仅支持免费体验2次","data":"2","time":1651321784428}'
-	#response = '{"code":0,"msg":"降重成功","data":"哈哈哈","time":1651324898679}'
+	#response = '{"code":-2004,"msg":"每篇报告仅支持免费体验2次","data":"2","time":1600000000000}'
+	#response = '{"code":0,"msg":"降重成功","data":"哈哈哈","time":1600000000000}'
 	if response.status_code == 200:
-	#status_code = 200
-	#if status_code == 200:
 		response = response.text
-		#response = response
 		code = json.loads(response)['code']
 		msg = json.loads(response)['msg']
 		if code == 0:
 			print("[+] " + str(msg))
-			print(response)
 			reduceSentence = json.loads(response)['data']
 			print("[+] 已降重文本为")
 			reduceSentence = unquote(reduceSentence, encoding="utf-8") # 将url编码转中文
@@ -140,11 +175,11 @@ def getTranslation(sentence, repoId):
 	else:
 		print("[-] 请求降重失败")
 
-# 写入编码文件
+# 写入编码文件，测试
 def writeTemp(temp):
 	with open('temp.txt', 'a+') as f:
 		f.write(temp)
-		
+
 if __name__ == '__main__':
 	logo()
 	maxnum = int(config['maxnum'])	# 指定一个账号的最大降重次数，实际此时取num和sentencelines列表个数中的较小者
@@ -180,7 +215,6 @@ if __name__ == '__main__':
 					#line = line.replace('+', '%20')	# 将空格编码为%20
 					#print("[+] 编码后文本长度: " + config['headers_reduce']['Content-Length'])
 					getTranslation(line, repoline)	# 降重文本
-					#print(sentence)
 				else:
 					break
 				num -= 1
