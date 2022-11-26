@@ -11,7 +11,7 @@ from urllib.parse import quote,unquote,quote_plus
 from time import sleep
 #from collections import deque
 
-os.environ['NO_PROXY'] = 'www.paperyy.com'
+os.environ['NO_PROXY'] = 'www.paperyy.com' # 修复因代理造成的请求失败问题
 
 config = {
 	# 可自由配置的选项
