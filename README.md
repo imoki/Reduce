@@ -17,7 +17,11 @@ paperyy每天有一次免费查重机会，查重后会生成报告，一份报�
 2. 建议每天都去查重，报告记录一周内都有效，可存起来用工具统一使用降重次数。  
   因此如果你有一周的报告记录，则可以使用14次的免费降重次数，实现对5600字的降重（400字*14）  
 3. 未被降重的文本会写入“notReduceSentence.txt”中，下次使用软件时可将这个文本改名为“sentence.txt”（待降重文本）进行降重  
-4. 多多支持“PaperYY”，如果觉得好用请将PaperYY推荐给身边的人。  
+4. 多多支持“PaperYY”，如果觉得好用请将PaperYY推荐给身边的人。 
+
+## 软件下载  
+* 版本1.2.3  
+https://github.com/imoki/Reduce/releases/download/v1.2.3/Reduce_v1.2.3.zip  
 
 ## 使用说明
 ### 获取查重报告url
