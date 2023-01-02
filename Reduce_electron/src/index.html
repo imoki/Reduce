@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>默降重</title>
+  <style>
+   #input-box, #output-box {
+    flex: 1;
+  }
+
+  </style>
+</head>
+
+<body>
+  <div>
+    <textarea id="url-box"  placeholder="请输入按行输入报告记录，例如：&#10https://report3.paperyy.com/20220101/3-aaaaaaaa-7777-8888-9999-111111111111/report.zip&#10https://report3.paperyy.com/20220101/3-aaaaaaaa-7777-8888-9999-222222222222/report.zip" style="width: 600px; height: 50px; margin: 10px; padding: 5px;"></textarea>
+    <!-- <input id="url-box" type="text"> -->
+  </div>
+
+  <!-- <div>
+    <label for="input-box">待降重文本:</label>
+  </div>
+  <div>
+    <textarea id="input-box" style="width: 600px; height: 100px"></textarea>
+  </div>
+
+  <div>
+    <label for="output-box">已降重文本:</label>
+  </div>
+  <div>
+    <textarea id="output-box" style="width: 600px; height: 100px"></textarea>
+  </div>
+  <button id="button">降重</button> -->
+  <div style="display: flex; flex-wrap: wrap">
+    <textarea id="input-box" placeholder="请输入待降重文本" style="width: 250px; height: 200px; margin: 10px; padding: 5px;"></textarea>
+    <button id="button" style="width: 60px; height: 20px;justify-content: center;margin-top: 105px;text-align: center;padding: 1px;">
+      <text>降重</text>
+    </button>
+    <textarea id="output-box" disabled placeholder="点击降重按钮，这里将显示已降重文本" style="width: 250px; height: 200px; margin: 10px; padding: 5px;"></textarea>
+  </div>
+  <button id="buttonclear" style="display: flex;float: right;margin: 10px;" id="button">
+    <text>清空已降重文本</text>
+  </button>
+
+
+
+  <script>
+    const { ipcRenderer } = require('electron');
+    const { exec } = require('child_process');
+    // const { fs } = require('fs');
+    const { remote } = require('electron');
+    const fs = remote.require('fs');
+
+    // const button = ElementUI.Button.extend({
+    //   template: '<button>按钮</button>'
+    // });
+
+    // new button().$mount('#app');
+
+    const button = document.getElementById('button');
+    const buttonclear = document.getElementById('buttonclear');
+    const urlBox = document.getElementById('url-box');
+    const inputBox = document.getElementById('input-box');
+    const outputBox = document.getElementById('output-box');
+
+    
+    // 执行降重程序
+    button.addEventListener('click', () => {
+      exec('start exe/reduce.exe', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
+      });
+    });
+
+    // 清空降重文本
+    buttonclear.addEventListener('click', () => {
+      fs.truncate('exe/reduceSentence.txt', 0, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    });
+    
+    // 报告记录
+    urlBox.addEventListener('input', (event) => {
+      const input = event.target.value;
+      // console.log(input);
+      fs.writeFileSync('exe/repo.txt', String(input), { flag: 'w+' });
+    });
+
+    // 待降重文本
+    inputBox.addEventListener('input', (event) => {
+      const input = event.target.value;
+      // console.log(input);
+      fs.writeFileSync('exe/sentence.txt', String(input), { flag: 'w+' });
+    });
+
+    // 监控降重文件是否被写入
+    fs.watch('exe/reduceSentence.txt', (eventType, filename) => {
+      fs.readFile('exe/reduceSentence.txt', 'utf8', (error, data) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log(data);
+          outputBox.value = data;
+        }
+      });
+    });
+
+
+    
+
+
+      // inputBox.addEventListener('input', (event) => {
+      //   const input = event.target.value;
+      //   // outputBox.value = input;
+      //   // const numbers = input.split(',').map(Number);
+      //   // const sum = numbers.reduce((acc, current) => acc + current, 0);
+      //   // const average = sum / numbers.length;
+      //   // outputBox.value = average;
+      //   ipcRenderer.send('input-received', input);
+      // });
+
+
+      // ipcRenderer.on('output-received', (event, output) => {
+      //   outputBox.value = output;
+      // });
+
+
+
+
+  </script>
+
+</body>
+
+</html>
