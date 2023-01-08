@@ -1,7 +1,8 @@
 # 论文批量降重工具（软件名：默降重）
 批量降重工具，基于paperyy的api实现一个报告降重800字，可用多个报告的降重次数对同一文本进行降重  
+觉得有用的话，欢迎**点亮右上角的Star**噢  
 
-## 微信小程序
+## 微信小程序（永久论文降重）
 <!-- ![永久论文降重](https://user-images.githubusercontent.com/78804251/210740316-3f2e3799-ec5f-4cf9-9691-c598c1c945e4.png)  -->
 <a href="https://imgse.com/i/pSVv89e"><img src="https://s1.ax1x.com/2023/01/08/pSVv89e.jpg" style="width:600px" alt="pSVv89e.jpg" border="0" /></a>
 
