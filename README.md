@@ -3,7 +3,7 @@
 
 ## 微信小程序
 <!-- ![永久论文降重](https://user-images.githubusercontent.com/78804251/210740316-3f2e3799-ec5f-4cf9-9691-c598c1c945e4.png)  -->
-<a href="https://imgse.com/i/pSVv89e"><img src="https://s1.ax1x.com/2023/01/08/pSVv89e.jpg" style="width=200px" alt="pSVv89e.jpg" border="0" /></a>
+<a href="https://imgse.com/i/pSVv89e"><img src="https://s1.ax1x.com/2023/01/08/pSVv89e.jpg" style="width=100px" alt="pSVv89e.jpg" border="0" /></a>
 
 ## 软件下载  
 * 版本2.0.0  
