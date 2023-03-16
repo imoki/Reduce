@@ -10,7 +10,7 @@
 * 版本2.0.0  
 https://github.com/imoki/Reduce/releases/download/v2.0.0/Reduce_v2.0.0.7z  
 * 备用地址（下载速度快）  
-https://everygg.lanzouf.com/iaVVR0jwx0id  
+https://everygg.lanzouf.com/iciIC0q750nc  
 密码:6666  
 
 ## 软件简要
