@@ -7,11 +7,9 @@
 <a href="https://imgse.com/i/pSVv89e"><img src="https://s1.ax1x.com/2023/01/08/pSVv89e.jpg" style="width:600px" alt="pSVv89e.jpg" border="0" /></a>
 
 ## 软件下载  
-* 版本2.0.0  
-https://github.com/imoki/Reduce/releases/download/v2.0.0/Reduce_v2.0.0.7z  
-* 备用地址（下载速度快）  
+* 版本2.0.0    
 https://everygg.lanzouf.com/iciIC0q750nc  
-密码:6666  
+密码:默库  
 
 ## 软件简要
   批量降重工具，基于paperyy的api实现一个报告降重800字的效果。  
