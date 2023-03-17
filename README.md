@@ -7,6 +7,7 @@
 <a href="https://imgse.com/i/pSVv89e"><img src="https://s1.ax1x.com/2023/01/08/pSVv89e.jpg" style="width:600px" alt="pSVv89e.jpg" border="0" /></a>
 
 ## 软件下载  
+使用说明书：https://github.com/imoki/Reduce  
 * 版本2.0.0    
 https://everygg.lanzouf.com/iciIC0q750nc  
 密码:默库  
